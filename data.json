@@ -1,0 +1,24 @@
+{
+  "client": {
+    "name": "VIX Brasil",
+    "url": "https://www.vixbrasil.com/",
+    "segment": "Moda Praia e Beachwear",
+    "github_user": "rodzisman",
+    "repo": "cro-vixbrasil",
+    "pages_url": "https://rodzisman.github.io/cro-vixbrasil"
+  },
+  "analyses": [
+    {
+      "id": "20260524_195315",
+      "date": "2026-05-24",
+      "report_url": "reports/20260524_195315.html",
+      "ux_score": 6.2,
+      "issues_critical": 0,
+      "issues_high": 2,
+      "opportunities": 3,
+      "ice_avg": 0.0,
+      "summary": "Proposta de valor pouco clara, CTAs genéricos e barreira de frete grátis alto. Foco em messaging e redução de fricção."
+    }
+  ],
+  "generated": "2026-05-24T20:14:52.928305"
+}
