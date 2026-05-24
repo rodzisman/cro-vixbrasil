@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRO Dashboard — VIX Brasil</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --p:#0d1b2a; --a:#e63946; --a2:#1d3557; --bg:#f0f4f8;
+  --card:#fff; --green:#2a9d8f; --yellow:#f4a261; --muted:#64748b; --border:#e2e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1e293b;line-height:1.6;}
+a{color:var(--a2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.header{background:linear-gradient(135deg,var(--p) 0%,var(--a2) 100%);color:#fff;padding:22px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.header h1{font-size:1.45em;font-weight:700;}
+.header p{font-size:.82em;opacity:.7;margin-top:4px;}
+.header-right{font-size:.8em;opacity:.75;text-align:right;}
+.header-right a{color:rgba(255,255,255,.85);}
+.badge-pages{display:inline-block;background:var(--green);color:#fff;padding:3px 10px;border-radius:12px;font-size:.75em;font-weight:700;margin-top:5px;}
+.wrap{max-width:1200px;margin:0 auto;padding:26px 20px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:24px;}
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-top:4px solid var(--border);position:relative;overflow:hidden;}
+.card.blue{border-top-color:var(--a2);}
+.card.red{border-top-color:var(--a);}
+.card.green{border-top-color:var(--green);}
+.card.yellow{border-top-color:var(--yellow);}
+.card-val{font-size:2.3em;font-weight:800;color:var(--p);line-height:1;}
+.card-lbl{font-size:.78em;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.4px;}
+.card-delta{font-size:.78em;margin-top:7px;font-weight:600;}
+.card-delta.pos{color:var(--green);}
+.card-delta.neg{color:var(--a);}
+.card-ico{position:absolute;right:14px;top:14px;font-size:1.7em;opacity:.12;}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+@media(max-width:700px){.charts{grid-template-columns:1fr;}}
+.chart-card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.07);}
+.chart-card h3{font-size:.82em;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px;}
+.chart-wrap{position:relative;height:210px;}
+.section-card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:18px;}
+.section-card h2{font-size:1em;color:var(--p);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.88em;}
+th{background:var(--p);color:#fff;padding:9px 13px;text-align:left;font-weight:600;font-size:.82em;}
+td{padding:9px 13px;border-bottom:1px solid var(--border);}
+tr:hover td{background:#f8fafc;}
+.bx{display:inline-block;padding:2px 8px;border-radius:9px;font-size:.78em;font-weight:600;}
+.bx-r{background:#fee2e2;color:#dc2626;}
+.bx-y{background:#fef3c7;color:#d97706;}
+.bx-g{background:#d1fae5;color:#059669;}
+.no-data{color:var(--muted);text-align:center;padding:36px;font-size:.88em;}
+.footer{text-align:center;padding:22px;font-size:.78em;color:var(--muted);border-top:1px solid var(--border);margin-top:18px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>CRO Dashboard &mdash; VIX Brasil</h1>
+    <p><a href="https://www.vixbrasil.com/" target="_blank" style="color:rgba(255,255,255,.8)">https://www.vixbrasil.com/</a> &nbsp;&bull;&nbsp; Moda Praia e Beachwear</p>
+  </div>
+  <div class="header-right">
+    <div>Atualizado: <strong id="last-upd">&mdash;</strong></div>
+    <span class="badge-pages">&#9654; GitHub Pages</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="cards">
+    <div class="card blue"><div class="card-ico">&#128202;</div>
+      <div class="card-val" id="cv-ux">&mdash;</div>
+      <div class="card-lbl">UX Score (0&ndash;10)</div>
+      <div class="card-delta" id="cd-ux"></div></div>
+    <div class="card red"><div class="card-ico">&#128680;</div>
+      <div class="card-val" id="cv-crit">&mdash;</div>
+      <div class="card-lbl">Issues Cr&iacute;ticos</div>
+      <div class="card-delta" id="cd-crit"></div></div>
+    <div class="card green"><div class="card-ico">&#127919;</div>
+      <div class="card-val" id="cv-opps">&mdash;</div>
+      <div class="card-lbl">Oportunidades</div>
+      <div class="card-delta" id="cd-opps"></div></div>
+    <div class="card yellow"><div class="card-ico">&#128203;</div>
+      <div class="card-val" id="cv-total">&mdash;</div>
+      <div class="card-lbl">An&aacute;lises Realizadas</div>
+      <div class="card-delta" id="cd-total"></div></div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-card">
+      <h3>Evolu&ccedil;&atilde;o do UX Score</h3>
+      <div class="chart-wrap"><canvas id="chartUX"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Issues por An&aacute;lise</h3>
+      <div class="chart-wrap"><canvas id="chartIssues"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section-card" id="summary-sec" style="display:none">
+    <h2>Resumo da &Uacute;ltima An&aacute;lise</h2>
+    <p id="summary-txt" style="color:#475569;line-height:1.75"></p>
+  </div>
+
+  <div class="section-card">
+    <h2>Hist&oacute;rico de An&aacute;lises</h2>
+    <table>
+      <thead><tr>
+        <th>Data</th><th>UX Score</th><th>Cr&iacute;ticos</th>
+        <th>Altos</th><th>Oportunidades</th><th>ICE M&eacute;dio</th><th>Relat&oacute;rio</th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  CRO Dashboard &mdash; VIX Brasil &nbsp;|&nbsp;
+  Gerado em 24/05/2026 20:14 &nbsp;|&nbsp;
+  <a href="https://www.vixbrasil.com/" target="_blank">https://www.vixbrasil.com/</a>
+</div>
+
+<script>
+const DATA = {"client": {"name": "VIX Brasil", "url": "https://www.vixbrasil.com/", "segment": "Moda Praia e Beachwear", "github_user": "rodzisman", "repo": "cro-vixbrasil", "pages_url": "https://rodzisman.github.io/cro-vixbrasil"}, "analyses": [{"id": "20260524_195315", "date": "2026-05-24", "report_url": "reports/20260524_195315.html", "ux_score": 6.2, "issues_critical": 0, "issues_high": 2, "opportunities": 3, "ice_avg": 0.0, "summary": "Proposta de valor pouco clara, CTAs genéricos e barreira de frete grátis alto. Foco em messaging e redução de fricção."}], "generated": "2026-05-24T20:14:52.928305"};
+
+function f(v,d){
+  if(v===null||v===undefined)return'&mdash;';
+  return d?Number(v).toFixed(d):String(v);
+}
+function scoreColor(s){
+  return s>=8?'#059669':s>=6?'#d97706':'#dc2626';
+}
+function scoreBx(s){
+  var cls=s>=8?'bx-g':s>=6?'bx-y':'bx-r';
+  return '<span class="bx '+cls+'">'+f(s,1)+'</span>';
+}
+function delt(cur,prv,better){
+  if(prv===undefined||prv===null)return'';
+  var d=cur-prv;
+  if(d===0)return'<span style="color:#94a3b8">Sem mudanca</span>';
+  var pos=better?d>0:d<0;
+  return'<span class="card-delta '+(pos?'pos':'neg')+'">'+(d>0?'+':'')+f(d,1)+' vs anterior</span>';
+}
+
+(function(){
+  var analyses=DATA.analyses||[];
+  document.getElementById('last-upd').textContent=DATA.generated?DATA.generated.split('T')[0]:'&mdash;';
+
+  if(!analyses.length){
+    document.getElementById('tb').innerHTML='<tr><td colspan="7" class="no-data">Nenhuma an&aacute;lise dispon&iacute;vel ainda.</td></tr>';
+    return;
+  }
+
+  var lat=analyses[analyses.length-1];
+  var prv=analyses.length>1?analyses[analyses.length-2]:null;
+
+  document.getElementById('cv-ux').textContent=f(lat.ux_score,1);
+  document.getElementById('cv-ux').style.color=scoreColor(lat.ux_score||0);
+  document.getElementById('cv-crit').textContent=f(lat.issues_critical);
+  document.getElementById('cv-opps').textContent=f(lat.opportunities);
+  document.getElementById('cv-total').textContent=analyses.length;
+
+  if(prv){
+    document.getElementById('cd-ux').innerHTML=delt(lat.ux_score,prv.ux_score,true);
+    document.getElementById('cd-crit').innerHTML=delt(lat.issues_critical,prv.issues_critical,false);
+    document.getElementById('cd-opps').innerHTML=delt(lat.opportunities,prv.opportunities,true);
+    document.getElementById('cd-total').innerHTML='<span class="card-delta pos">+1 nova</span>';
+  }
+
+  if(lat.summary){
+    document.getElementById('summary-sec').style.display='block';
+    document.getElementById('summary-txt').textContent=lat.summary;
+  }
+
+  var dates=analyses.map(function(a){return a.date;});
+  var uxArr=analyses.map(function(a){return a.ux_score||0;});
+  var critArr=analyses.map(function(a){return a.issues_critical||0;});
+  var highArr=analyses.map(function(a){return a.issues_high||0;});
+
+  var baseOpts={responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:10}}}}};
+
+  new Chart(document.getElementById('chartUX'),{
+    type:'line',
+    data:{labels:dates,datasets:[{
+      label:'UX Score',data:uxArr,
+      borderColor:'#1d3557',backgroundColor:'rgba(29,53,87,.08)',
+      tension:.35,fill:true,pointBackgroundColor:'#1d3557',pointRadius:5
+    }]},
+    options:Object.assign({},baseOpts,{scales:{y:{min:0,max:10,ticks:{stepSize:2}}}})
+  });
+
+  new Chart(document.getElementById('chartIssues'),{
+    type:'bar',
+    data:{labels:dates,datasets:[
+      {label:'Criticos',data:critArr,backgroundColor:'#e63946'},
+      {label:'Altos',data:highArr,backgroundColor:'#f4a261'}
+    ]},
+    options:Object.assign({},baseOpts,{scales:{x:{stacked:true},y:{stacked:true}}})
+  });
+
+  var tb=document.getElementById('tb');
+  tb.innerHTML='';
+  analyses.slice().reverse().forEach(function(a){
+    var lnk=a.report_url?'<a href="'+a.report_url+'" target="_blank">Ver relatorio</a>':'&mdash;';
+    tb.innerHTML+='<tr>'+
+      '<td>'+f(a.date)+'</td>'+
+      '<td>'+scoreBx(a.ux_score||0)+'</td>'+
+      '<td><span class="bx bx-r">'+f(a.issues_critical)+'</span></td>'+
+      '<td>'+f(a.issues_high)+'</td>'+
+      '<td>'+f(a.opportunities)+'</td>'+
+      '<td>'+f(a.ice_avg,1)+'</td>'+
+      '<td>'+lnk+'</td></tr>';
+  });
+})();
+</script>
+</body>
+</html>
