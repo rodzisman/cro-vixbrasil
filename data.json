@@ -18,7 +18,18 @@
       "opportunities": 3,
       "ice_avg": 0.0,
       "summary": "Proposta de valor pouco clara, CTAs genéricos e barreira de frete grátis alto. Foco em messaging e redução de fricção."
+    },
+    {
+      "id": "20260524_224435",
+      "date": "2026-05-24",
+      "report_url": "reports/20260524_224435.html",
+      "ux_score": 4.2,
+      "issues_critical": 3,
+      "issues_high": 8,
+      "opportunities": 15,
+      "ice_avg": 0.0,
+      "summary": "Site com problemas críticos de disponibilidade e performance. Erro de timeout impedindo acesso e funcionalidades de e-commerce comprometidas."
     }
   ],
-  "generated": "2026-05-24T20:14:52.928305"
+  "generated": "2026-05-24T22:44:46.096512"
 }
