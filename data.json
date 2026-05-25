@@ -29,7 +29,18 @@
       "opportunities": 15,
       "ice_avg": 0.0,
       "summary": "Site com problemas críticos de disponibilidade e performance. Erro de timeout impedindo acesso e funcionalidades de e-commerce comprometidas."
+    },
+    {
+      "id": "20260524_230535",
+      "date": "2026-05-24",
+      "report_url": "reports/20260524_230535.html",
+      "ux_score": 4.2,
+      "issues_critical": 3,
+      "issues_high": 8,
+      "opportunities": 15,
+      "ice_avg": 0.0,
+      "summary": "Site com problemas críticos de disponibilidade e performance. ERR_TIMED_OUT impedindo acesso. Score 42/100 vs concorrentes 65-85."
     }
   ],
-  "generated": "2026-05-24T22:44:46.096512"
+  "generated": "2026-05-24T23:05:49.859571"
 }
